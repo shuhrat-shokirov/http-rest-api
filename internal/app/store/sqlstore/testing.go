@@ -14,12 +14,12 @@ func TestDB(t *testing.T, databaseUrl string) (*sql.DB, func(...string)) {
 		t.Fatal(err)
 	}
 
-	if err := db.Ping(); err !=nil{
+	if err := db.Ping(); err != nil {
 		t.Fatal(err)
 	}
 
 	return db, func(tables ...string) {
-		if len(tables)>0{
+		if len(tables) > 0 {
 			db.Exec("TRUNCATE %s CASCADE", strings.Join(tables, ", "))
 		}
 		db.Close()

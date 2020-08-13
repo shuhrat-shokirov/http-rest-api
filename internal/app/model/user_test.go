@@ -5,12 +5,6 @@ import (
 	"testing"
 )
 
-func TestUser_BeforeCreate(t *testing.T) {
-	u := TestUser(t)
-	assert.NoError(t, u.BeforeCreate())
-	assert.NotNil(t, u.EncryptPassword)
-}
-
 func TestUser_Validate(t *testing.T) {
 	testCases := []struct {
 		name    string
@@ -25,11 +19,12 @@ func TestUser_Validate(t *testing.T) {
 			isValid: true,
 		},
 		{
-			name: "with encrypt password",
+			name: "with encrypted password",
 			u: func() *User {
 				u := TestUser(t)
 				u.Password = ""
-				u.EncryptPassword = "sadadasdpassword"
+				u.EncryptPassword = "encryptedpassword"
+
 				return u
 			},
 			isValid: true,
@@ -39,6 +34,7 @@ func TestUser_Validate(t *testing.T) {
 			u: func() *User {
 				u := TestUser(t)
 				u.Email = ""
+
 				return u
 			},
 			isValid: false,
@@ -48,6 +44,7 @@ func TestUser_Validate(t *testing.T) {
 			u: func() *User {
 				u := TestUser(t)
 				u.Email = "invalid"
+
 				return u
 			},
 			isValid: false,
@@ -57,6 +54,7 @@ func TestUser_Validate(t *testing.T) {
 			u: func() *User {
 				u := TestUser(t)
 				u.Password = ""
+
 				return u
 			},
 			isValid: false,
@@ -65,12 +63,12 @@ func TestUser_Validate(t *testing.T) {
 			name: "short password",
 			u: func() *User {
 				u := TestUser(t)
-				u.Password = "qwe"
+				u.Password = "short"
+
 				return u
 			},
 			isValid: false,
 		},
-
 	}
 
 	for _, tc := range testCases {
@@ -82,4 +80,10 @@ func TestUser_Validate(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestUser_BeforeCreate(t *testing.T) {
+	u := TestUser(t)
+	assert.NoError(t, u.BeforeCreate())
+	assert.NotEmpty(t, u.EncryptPassword)
 }

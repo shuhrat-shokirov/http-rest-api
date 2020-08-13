@@ -7,7 +7,7 @@ import (
 )
 
 type Store struct {
-	db     *sql.DB
+	db             *sql.DB
 	userRepository *UserRepository
 }
 
@@ -18,7 +18,7 @@ func New(db *sql.DB) *Store {
 }
 
 func (s *Store) User() store.UserRepository {
-	if s.userRepository != nil{
+	if s.userRepository != nil {
 		return s.userRepository
 	}
 

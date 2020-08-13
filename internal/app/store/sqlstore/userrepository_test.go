@@ -1,27 +1,30 @@
-package store
+package sqlstore
 
 import (
 	"github.com/shuhrat-shokirov/http-rest-api/internal/app/model"
+	"github.com/shuhrat-shokirov/http-rest-api/internal/app/store"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
 func TestUserRepository_Create(t *testing.T) {
-	s, teardown := TestStore(t, databaseUrl)
+	db, teardown := TestDB(t, databaseUrl)
 	defer teardown("users")
 
-	u, err := s.User().Create(model.TestUser(t))
-	assert.NoError(t, err)
+	s := New(db)
+	u := model.TestUser(t)
+	assert.NoError(t, s.User().Create(u))
 	assert.NotNil(t, u)
 }
 
 func TestUserRepository_FindByEmail(t *testing.T) {
-	s, teardown := TestStore(t, databaseUrl)
+	db, teardown := TestDB(t, databaseUrl)
 	defer teardown("users")
 
+	s := New(db)
 	email := "abcd@mail.ru"
 	_, err := s.User().FindByEmail(email)
-	assert.Error(t, err)
+	assert.EqualError(t, err, store.ErrRecordNotFound.Error())
 
 	u := model.TestUser(t)
 	u.Email = email

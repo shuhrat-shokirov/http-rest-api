@@ -23,7 +23,7 @@ func TestUser_Validate(t *testing.T) {
 			u: func() *User {
 				u := TestUser(t)
 				u.Password = ""
-				u.EncryptPassword = "encryptedpassword"
+				u.EncryptedPassword = "encryptedpassword"
 
 				return u
 			},
@@ -85,5 +85,5 @@ func TestUser_Validate(t *testing.T) {
 func TestUser_BeforeCreate(t *testing.T) {
 	u := TestUser(t)
 	assert.NoError(t, u.BeforeCreate())
-	assert.NotEmpty(t, u.EncryptPassword)
+	assert.NotEmpty(t, u.EncryptedPassword)
 }

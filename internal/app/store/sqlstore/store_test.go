@@ -6,13 +6,13 @@ import (
 )
 
 var (
-	databaseUrl string
+	databaseURL string
 )
 
 func TestMain(m *testing.M) {
-	databaseUrl = os.Getenv("DATABASE_URL")
-	if databaseUrl == "" {
-		databaseUrl = "host=localhost dbname=restapi_test user=user password=pass sslmode=disable"
+	databaseURL = os.Getenv("DATABASE_URL")
+	if databaseURL == "" {
+		databaseURL = "host=localhost dbname=restapi_test sslmode=disable"
 	}
 
 	os.Exit(m.Run())
